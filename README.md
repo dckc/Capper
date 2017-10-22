@@ -27,9 +27,11 @@ which will do the same thing.
 Next, you must modify the capper.config file to suit your needs. To conduct client-server testing on your development machine, you probably want to set "domain" to "localhost"; it will certainly not work if you leave the domain unchanged. Select a port you can open on your machine (beware of firewalls blocking ports, you may have to configure the firewall as well). At this time you must use protocol https. The self-signed certificate embodied in the "ssl" folder will be adequate for simple testing, though you will have to click OK through the cert monolog boxes in your browser.
 
 In a command window, change directories to the Capper folder and startup the server from the command line with
+
     > node --harmony-proxies server
 
 or, if you find it is too easy to forget to include the harmony option
+
     > npm start
 
 Now in the browser go to page <https://localhost:1341/> (_replace "1341" with your port number_) which should pop you to the Capper Home page; this page can be edited in the Capper/views/index.html file.
@@ -38,6 +40,7 @@ Use a Chrome or Firefox browser for the following examples. To keep the example 
 
 #### Create A New HelloWorld Service
 To create a private hello world page, accessible only by you, shut down the server and type the command
+
     > node --harmony-proxies server -make hello
 
 This should print out a url that is a private unguessable url, it should look something like this:
@@ -46,6 +49,7 @@ This should print out a url that is a private unguessable url, it should look so
 The part after the "#s=" is the cryptographically strong and unguessable credential. This url refers to a new private Hello World page. Turn on the server again, go to your url, and you should see it. Bookmark the url if you want to go back to see it again later.
 
 You can destroy a service with the "drop" command using the credential. For the example service above, you would destroy it by shutting down the server and executing
+
     > node --harmony-proxies server -drop Vs6Q6ofuVL_DzzqoYe8cEuO
 
 #### Create Your Own HelloGalaxy Service
@@ -67,14 +71,17 @@ This first version of HelloGalaxy has a single method "greet" that always return
 Note that the HelloGalaxy function that makes HelloGalaxy services receives a "context" as an argument. Among other things, the context's "state" property stores the persistent data associated with a particular instance of the service type, as we will see later.
 
 Create a new HelloGalaxy service as we did Hello earlier:
+
     > node --harmony-proxies server -make helloGalaxy
 
-We have not yet built a user interface for HelloGalaxy, but you can interact with it from the command line. Using the webkey created in the previous step, 
+We have not yet built a user interface for HelloGalaxy, but you can interact with it from the command line. Using the webkey created in the previous step,
+
     > node --harmony-proxies server -post @webkey greet
 
 On this command line, the webkey is prefixed with "@" to indicate it should be interpreted as a reference to an object. The first argument for a -post command is always the target object to receive the message. The second word, "greet", is the name of the method to invoke. Additional arguments are used as arguments in the method invocation. 
 
 Invoking the object with -post should return a result similar to
+
     {"=":"Hello Galaxy"}
 
 which is the JSON format of the returned value sent to the client.
@@ -188,6 +195,7 @@ describe ("hello galaxy", function() {
 });
 ```
 Run the test by going into the main Capper directory and running mocha:
+
     > mocha --harmony-proxies
 
 Our test creates a new helloGalaxy service with saver.make, sets the greeting, and asserts that the greeting retrieved from the service is in fact the greeting that we set. At the end of the testing, we drop the service to avoid having it become a permanent part of our database. The saver.drop method requires the internal persistent id of the object, not a live reference to the object, so we retrieve that with saver.asId(object).
