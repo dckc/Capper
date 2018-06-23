@@ -115,7 +115,8 @@ function makeSaver(unique /*: () => string*/,
             var last = lastCheckpointQueued;
             lastCheckpointQueued = vowPair.promise;
             last.then(function(_ok) {
-                var jsonState = JSON.stringify(sysState);
+		const indentSpaces = 2;
+                var jsonState = JSON.stringify(sysState, null, indentSpaces);
                 checkpointNeeded = false; //yes, say it again on each turn
                 var dbunsync = dbfile.unsync();
                 return dbunsync.writeText(jsonState)
